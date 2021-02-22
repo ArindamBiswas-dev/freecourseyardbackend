@@ -39,5 +39,3 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/", router);
-
-//mongodb+srv://fcybackend:fcybackend@cluster0.am8vj.mongodb.net/freecourseyardbackend?retryWrites=true&w=majority
