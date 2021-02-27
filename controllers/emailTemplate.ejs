@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        background-color: white;
+        font-family: "Ubuntu", sans-serif;
+      }
+
+      .container {
+        display: flex;
+        height: 50vh;
+      }
+
+      .inner_container {
+        margin: auto;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        max-width: 350px;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      p {
+        margin: 12px 0px;
+        line-height: 20px;
+        font-size: 18px;
+        text-align: justify;
+      }
+
+      .linkdiv {
+        margin-top: 15px;
+        display: flex;
+      }
+
+      .link {
+        width: 100%;
+        padding: 1rem;
+        color: white;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        background-color: #0288d1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="inner_container">
+        <h1>WellCome</h1>
+        <p>Hi <%= name %>,</p>
+        <p>
+          Thanks for signing up! We need to verify your email to complete your
+          profile setting.
+        </p>
+        <small>*Click the button below to verify</small>
+        <div class="linkdiv">
+          <a
+            class="link"
+            href="http://localhost:8000/confirmuser/<%= confirmationCode %>"
+            >Click Here</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

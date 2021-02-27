@@ -12,4 +12,12 @@ router.get("/search/:id", RouterController.getBySearch);
 
 router.post("/addcourse", RouterController.addCourse);
 
+router.post("/signup", RouterController.signUp);
+
+router.post("/login", RouterController.logIn);
+
+router.post("/logout", RouterController.logout);
+
+router.get("/confirmuser/:id", RouterController.verifyUser);
+
 module.exports = router;

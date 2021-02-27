@@ -1,6 +1,11 @@
+const bcrypt = require("bcryptjs");
+const cryptoRandomString = require("crypto-random-string");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("./nodemailer.config");
+require("dotenv").config();
+
 exports.getAll = async (req, res, next) => {
   try {
-
     const currentPageNo = req.query.page;
 
     const numberOfDocumentSendOneFetch = 4;
@@ -74,3 +79,90 @@ exports.getBySearch = async (req, res, next) => {
     console.log(err);
   }
 };
+
+exports.signUp = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    const favourite = [];
+    const confirmationToken = cryptoRandomString({
+      length: 10,
+      type: "url-safe",
+    });
+
+    const status = "pending";
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await req.app.locals.database.collection("userdata").insertOne({
+      name,
+      email,
+      password: hashedPassword,
+      confirmationToken,
+      status,
+      favourite,
+    });
+    nodemailer.sendConfirmationEmail(name, email, confirmationToken);
+
+    res.json({ status: "User Created" });
+  } catch (error) {
+    if (error.code === 11000) res.json({ status: "User already exists" });
+    else {
+      console.log(error);
+      res.json({ status: "Internal server error" });
+    }
+  }
+};
+
+exports.verifyUser = async (req, res, next) => {
+  try {
+    const confirmationToken = req.params.id;
+    const user = await req.app.locals.database
+      .collection("userdata")
+      .findOne({ confirmationToken });
+
+    if (!user) {
+      return res.json({ status: `Can't find user` });
+    }
+
+    await req.app.locals.database
+      .collection("userdata")
+      .updateOne({ confirmationToken }, { $set: { status: "active" } });
+
+    res.json({ status: "user activate" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.logIn = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await req.app.locals.database
+      .collection("userdata")
+      .findOne({ email })
+
+    if (!user) {
+      return res.json({ status: "User does not exists" });
+    }
+
+    if (user.status === "pending") {
+      return res.json({ status: "Verify the email before LogIn" });
+    }
+
+    if (await bcrypt.compare(password, user.password)) {
+      //* send the jwt token to the user
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+      return res.json({
+        status: "logIN Successfull",
+        token: token,
+      });
+    } else {
+      return res.json({ status: "Email or Password is wrong" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.logout = async (req, res, next) => {};

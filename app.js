@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const router = require("./routes/userRoutes");
-require('dotenv').config();
+const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const app = express();
 var bodyParser = require("body-parser");
@@ -11,6 +12,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+
+// cross-origin
+app.use(cors());
+
+app.use(express.json());
+
+app.use(cookieParser());
 
 // let database; let collection;
 
@@ -34,8 +42,5 @@ async function run() {
   app.locals.database = client.db("freecourseyardbackend");
 }
 run().catch(console.dir);
-
-app.use(cors());
-app.use(express.json());
 
 app.use("/", router);
