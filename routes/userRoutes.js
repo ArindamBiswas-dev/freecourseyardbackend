@@ -10,14 +10,18 @@ router.get("/popularchoices", RouterController.getPopularCholices);
 
 router.get("/search/:id", RouterController.getBySearch);
 
+router.get("/isfavorite", RouterController.isFavorite);
+
+router.get("/favorites", RouterController.favorites);
+
 router.post("/addcourse", RouterController.addCourse);
 
 router.post("/signup", RouterController.signUp);
 
 router.post("/login", RouterController.logIn);
 
-router.post("/logout", RouterController.logout);
-
 router.get("/confirmuser/:id", RouterController.verifyUser);
+
+router.post("/setfavorite", RouterController.setFavorite);
 
 module.exports = router;
