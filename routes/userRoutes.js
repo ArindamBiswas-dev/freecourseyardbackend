@@ -1,27 +1,33 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
 
-const RouterController = require("../controllers/userRouteController");
+const RouterController = require('../controllers/userRouteController');
 
-router.get("/", RouterController.getAll);
+router.get('/', RouterController.getAll);
 
-router.get("/popularchoices", RouterController.getPopularCholices);
+router.get('/popularchoices', RouterController.getPopularCholices);
 
-router.get("/search/:id", RouterController.getBySearch);
+router.get('/search/:id', RouterController.getBySearch);
 
-router.get("/isfavorite", RouterController.isFavorite);
+router.get('/singlesearch/:id', RouterController.getBySingleSearch);
 
-router.get("/favorites", RouterController.favorites);
+router.get('/autocompletesearch', RouterController.getByAutocompleteSearch);
 
-router.post("/addcourse", RouterController.addCourse);
+router.get('/catagory/:id', RouterController.getCatagorySearch);
 
-router.post("/signup", RouterController.signUp);
+router.post('/addcourse', RouterController.addCourse);
 
-router.post("/login", RouterController.logIn);
+router.get('/confirmuser/:id', RouterController.verifyUser);
 
-router.get("/confirmuser/:id", RouterController.verifyUser);
+router.get('/isfavorite', RouterController.isFavorite);
 
-router.post("/setfavorite", RouterController.setFavorite);
+router.get('/favorites', RouterController.favorites);
+
+router.post('/signup', RouterController.signUp);
+
+router.post('/login', RouterController.logIn);
+
+router.post('/setfavorite', RouterController.setFavorite);
 
 module.exports = router;
