@@ -243,7 +243,16 @@ exports.logIn = async (req, res, next) => {
     }
 
     if (user.status === 'pending') {
-      return res.json({ status: 'Verify the email before LogIn' });
+      nodemailer.sendConfirmationEmail(
+        user.name,
+        user.email,
+        user.confirmationToken
+      );
+      return res.json({
+        title: 'Verify Email',
+        status: 'We have send you a mail, verify it before LogIN',
+        code: '404',
+      });
     }
 
     if (await bcrypt.compare(password, user.password)) {
